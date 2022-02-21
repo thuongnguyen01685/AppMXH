@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import { login } from "../redux/actions/authAction";
 
 const Login = () => {
@@ -11,6 +12,9 @@ const Login = () => {
   const [typePass, setTypePass] = useState(false);
   const dispatch = useDispatch();
 
+  const { auth } = useSelector((state) => state);
+  const history = useHistory();
+
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
@@ -19,6 +23,9 @@ const Login = () => {
     e.preventDefault();
     dispatch(login(userData));
   };
+  useEffect(() => {
+    if (auth.token) history.push("/");
+  }, [auth.token, history]);
   return (
     <div className="auth_page">
       <form onSubmit={handleSubmit} method="POST">

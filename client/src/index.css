@@ -30,6 +30,16 @@ code {
     margin: auto;
 }
 
+img {
+    object-fit: cover;
+}
+
+.avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
 
 /*----------AUTH----------------*/
 
@@ -38,3 +48,7 @@ code {
 /*----------LOADING----------------*/
 
 @import url(./styles/loading.css);
+
+/*-------------HEADER------------*/
+
+@import url(./styles/header.css);
