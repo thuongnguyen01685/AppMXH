@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const authRouter = require("./routers/authRouter");
+const userRouter = require("./routers/userRouter");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 //router
 app.use("/api", authRouter);
+app.use("/api", userRouter);
 
 const port = process.env.PORT || 5000;
 app.get("/", (req, res) => {
