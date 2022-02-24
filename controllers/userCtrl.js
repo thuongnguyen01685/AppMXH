@@ -26,7 +26,7 @@ const userCtrl = {
   },
   updateUser: async (req, res) => {
     try {
-      const { avatar, fullname, moblie, address, story, website, gender } =
+      const { avatar, fullname, mobile, address, story, website, gender } =
         req.body;
       if (!fullname)
         return res.status(400).json({ msg: "Please add your full name." });
