@@ -57,13 +57,15 @@ const userCtrl = {
       });
       if (user.length > 0)
         return res.status(500).json({ msg: "You followed this user." });
+
       const newUser = await Users.findOneAndUpdate(
-        { _id: req.params._id },
+        { _id: req.params.id },
         {
           $push: { followers: req.user._id },
         },
         { new: true }
       ).populate("followers following", "-password");
+
       await Users.findOneAndUpdate(
         { _id: req.user._id },
         {
@@ -71,9 +73,33 @@ const userCtrl = {
         },
         { new: true }
       );
+
       res.json({ newUser });
-    } catch (error) {
-      return res.status(500).json({ msg: error.message });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  unfollow: async (req, res) => {
+    try {
+      const newUser = await Users.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $pull: { followers: req.user._id },
+        },
+        { new: true }
+      ).populate("followers following", "-password");
+
+      await Users.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          $pull: { following: req.params.id },
+        },
+        { new: true }
+      );
+
+      res.json({ newUser });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
     }
   },
 };
