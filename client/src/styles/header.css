@@ -6,11 +6,17 @@
     left: 0;
     z-index: 2;
     box-shadow: 0 0 10px #ddd;
+    background: #4bb5ef;
+    border: 1px solid rgb(0, 0, 0, .125);
 }
 
 .header .navbar {
     width: 100%;
     height: 100%;
+}
+
+.navbar-light .navbar-brand {
+    color: white;
 }
 
 .header .logo h1 {
@@ -21,7 +27,7 @@
 /*-------------MENU-------------*/
 
 .header .menu li {
-    opacity: 0.5;
+    opacity: 0.8;
 }
 
 .header .menu li.active {
@@ -106,12 +112,14 @@
 
 @media (max-width: 768px) {
     .header .menu {
-        position: fixed;
-        bottom: 0;
+        position: absolute;
+        top: calc(100vh - 50px);
         left: 0;
+        height: 50px;
         width: 100%;
         box-shadow: 0 0 10px #ddd;
         z-index: 2;
+        background: #f8f9fa;
     }
     .header .menu .navbar-nav {
         display: flex;

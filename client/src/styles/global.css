@@ -25,7 +25,7 @@ code {
 }
 
 .main {
-    max-width: 1000px;
+    max-width: 1400px;
     width: 100%;
     margin: auto;
 }
@@ -62,3 +62,13 @@ img {
 /*-------------STATUS_MODAl--------------*/
 
 @import url(./status_modal.css);
+.mode {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/*-------------COMMENT--------------*/
+
+@import url(./comments.css);

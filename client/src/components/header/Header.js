@@ -5,10 +5,14 @@ import Search from "./Search";
 
 const Header = () => {
   return (
-    <div className="header bg-info">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light justify-content-between align-middle">
+    <div className="header">
+      <nav className="navbar navbar-expand-lg navbar-light justify-content-between align-middle">
         <Link className="logo" to="/">
-          <h1 className="navbar-brand text-uppercase p-0 m-0">Zahu</h1>
+          <h1
+            className="navbar-brand text-uppercase p-0 m-0"
+            onClick={() => window.scrollTo({ top: 0 })}>
+            Zahu
+          </h1>
         </Link>
         <Search />
         <Menu />
