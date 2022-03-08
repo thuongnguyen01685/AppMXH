@@ -39,14 +39,14 @@ const Info = () => {
   return (
     <div className="info">
       {userData.map((user) => (
-        <div className="info_container" key={user.id}>
+        <div className="info_container" key={user._id}>
           <Avatar src={user.avatar} size="supper-avatar" />
           <div className="info_content">
             <div className="info_content_title">
-              <h2>{user.username}</h2>
+              <h2>{user.fullname}</h2>
               {user._id === auth.user._id ? (
                 <button
-                  className="btn btn-outline-info"
+                  className="btn btn-outline-warning"
                   onClick={() => setOnEdit(true)}>
                   Edit Profile
                 </button>
@@ -63,11 +63,27 @@ const Info = () => {
               </span>
             </div>
             <h6>
-              {user.fullname} <span className="text-danger">{user.mobile}</span>
+              {user.username}{" "}
+              <span className="text-danger">
+                <span className="material-icons">contact_phone</span>
+                {user.mobile}
+              </span>
             </h6>
-            <p className="m-0">{user.address}</p>
-            <h6 className="m-0">{user.email}</h6>
-            <a href={user.website} target="_blank" rel="noreferrer">
+            <p className="m-0 d-flex">
+              {" "}
+              <span className="material-icons mr-2">other_houses</span>
+              {user.address}
+            </p>
+            <h6 className="m-0 d-flex">
+              <span className="material-icons mr-2">mail_outline</span>
+              {user.email}
+            </h6>
+            <a
+              href={user.website}
+              target="_blank"
+              rel="noreferrer"
+              className="d-flex">
+              <span className="material-icons mr-2">language</span>
               {user.website}
             </a>
             <p>{user.story}</p>

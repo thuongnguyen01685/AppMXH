@@ -42,7 +42,7 @@ const Menu = () => {
           </span>
           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
             <Link className="dropdown-item" to={`/profile/${auth.user._id}`}>
-              Profile
+              Trang cá nhân
             </Link>
             <label
               htmlFor="theme"
@@ -50,7 +50,15 @@ const Menu = () => {
               onClick={() =>
                 dispatch({ type: GLOBALTYPES.THEME, payload: !theme })
               }>
-              {theme ? "Light mode" : "Dark mode"}
+              {theme ? (
+                <div className="d-flex">
+                  Light mode<span className="material-icons">light_mode</span>
+                </div>
+              ) : (
+                <div className="d-flex">
+                  Dark mode<span className="material-icons">dark_mode</span>
+                </div>
+              )}
             </label>
 
             <div className="dropdown-divider" />
@@ -60,7 +68,9 @@ const Menu = () => {
               onClick={() => {
                 dispatch(logout());
               }}>
-              Logout
+              <div className="d-flex">
+                Logout<span className="material-icons">logout</span>
+              </div>
             </Link>
           </div>
         </li>

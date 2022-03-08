@@ -62,13 +62,12 @@ img {
 /*-------------STATUS_MODAl--------------*/
 
 @import url(./status_modal.css);
+
+/*-------------COMMENT--------------*/
+
+@import url(./comments.css);
 .mode {
     width: 100%;
     height: 100vh;
     overflow: hidden;
 }
-
-
-/*-------------COMMENT--------------*/
-
-@import url(./comments.css);

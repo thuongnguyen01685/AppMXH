@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
-import { createPost, updatePost } from "../redux/actions/postAction";
+import { createPost, getPosts, updatePost } from "../redux/actions/postAction";
 
 const StatusModal = () => {
   const { auth, theme, status } = useSelector((state) => state);
@@ -87,6 +87,7 @@ const StatusModal = () => {
       dispatch(updatePost({ content, images, auth, status }));
     } else {
       dispatch(createPost({ content, images, auth }));
+      dispatch(getPosts(auth.token));
     }
     setContent("");
     setImages([]);
@@ -105,7 +106,7 @@ const StatusModal = () => {
       <form onSubmit={handleSubmit}>
         <div className="status_header">
           <h5 className="m-0">
-            {status.onEdit ? "Update Post" : "Create Post"}
+            {status.onEdit ? "Sửa bài viết" : "Tạo bài viết"}
           </h5>
           <span
             onClick={() =>
@@ -118,7 +119,7 @@ const StatusModal = () => {
           <textarea
             name="content"
             value={content}
-            placeholder={`${auth.user.username}, what are you thinking ?`}
+            placeholder={`${auth.user.username}, Bạn đang nghĩ gì ?`}
             onChange={(e) => setContent(e.target.value)}
           />
           <div className="show_images">
@@ -182,7 +183,7 @@ const StatusModal = () => {
             disabled={
               content.length !== 0 || images.length !== 0 ? false : true
             }>
-            {status.onEdit ? "Save" : "Post"}
+            {status.onEdit ? "Lưu" : "Tạo bài viết"}
           </button>
         </div>
       </form>

@@ -28,7 +28,10 @@ export const createPost =
         payload: { ...res.data.newPost, user: auth.user },
       });
 
-      dispatch({ type: GLOBALTYPES.ALERT, payload: { loading: false } });
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { loading: false, success: res.data.msg },
+      });
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,

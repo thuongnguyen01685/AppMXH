@@ -59,9 +59,14 @@ const Login = () => {
               onChange={handleChangeInput}
               name="password"
               value={password}
+              autoComplete="off"
             />
             <small onClick={() => setTypePass(!typePass)}>
-              {typePass ? "Hide" : "Show"}
+              {typePass ? (
+                <span className="material-icons">visibility_off</span>
+              ) : (
+                <span className="material-icons">visibility</span>
+              )}
             </small>
           </div>
         </div>

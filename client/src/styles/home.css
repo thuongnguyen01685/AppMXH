@@ -56,6 +56,10 @@
     margin: 5px 0;
 }
 
+.col-md-2 {
+    left: 10px;
+}
+
 
 /*----------------------REPONSIVE_HEADER_CARD----------*/
 
@@ -63,6 +67,15 @@
     .posts .card_header .dropdown-menu {
         position: fixed;
         right: -80px;
+    }
+    .col-md-2 {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-6 {
+        left: 35px;
     }
 }
 

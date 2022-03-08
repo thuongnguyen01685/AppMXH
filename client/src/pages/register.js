@@ -102,7 +102,11 @@ const Register = () => {
               style={{ background: `${alert.password ? "#fd2d6a14" : ""}` }}
             />
             <small onClick={() => setTypePass(!typePass)}>
-              {typePass ? "Hide" : "Show"}
+              {typePass ? (
+                <span className="material-icons">visibility_off</span>
+              ) : (
+                <span className="material-icons">visibility</span>
+              )}
             </small>
           </div>
           <small className="form-text text-danger">
@@ -123,7 +127,11 @@ const Register = () => {
               style={{ background: `${alert.cf_password ? "#fd2d6a14" : ""}` }}
             />
             <small onClick={() => setTypeCfPass(!typeCfPass)}>
-              {typeCfPass ? "Hide" : "Show"}
+              {typeCfPass ? (
+                <span className="material-icons">visibility_off</span>
+              ) : (
+                <span className="material-icons">visibility</span>
+              )}
             </small>
           </div>
           <small className="form-text text-danger">

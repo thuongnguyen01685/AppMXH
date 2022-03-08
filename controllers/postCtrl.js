@@ -1,11 +1,12 @@
 const Posts = require("../models/postModel");
+const Comments = require("../models/commentModel");
 
 const postCtrl = {
   createPost: async (req, res) => {
     try {
       const { content, images } = req.body;
-      if (content.length === 0)
-        return res.status(400).json({ msg: "Please add content." });
+      if (content.length === 0 && images.length === 0)
+        return res.status(400).json({ msg: "Please add content or image." });
       const newPost = await new Posts({
         content,
         images,
@@ -97,6 +98,23 @@ const postCtrl = {
         { new: true }
       );
       res.json({ msg: "UnLiked post !" });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  deletePost: async (req, res) => {
+    try {
+      const post = await Posts.findByIdAndDelete({
+        _id: req.params._id,
+        user: req.user._id,
+      });
+      await Comments.res.json({
+        msg: "Deleted Post",
+        newPost: {
+          ...post,
+          user: req.user,
+        },
+      });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

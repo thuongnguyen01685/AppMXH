@@ -4,7 +4,7 @@ const initialState = false;
 
 const modalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GLOBALTYPES.THEME:
+    case GLOBALTYPES.MODAL:
       return action.payload;
     default:
       return state;
