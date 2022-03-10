@@ -7,6 +7,13 @@ export const getDataAPI = async (url, token) => {
   return res;
 };
 
+export const getData = async () => {
+  const res = await axios.get(
+    `https://api.fostech.vn/api/60939744ac969b4078488026/blog?access_token=e8ba858476afc6a0f6c1d3d686e275a8`
+  );
+  return res;
+};
+
 export const postDataAPI = async (url, post, token) => {
   const res = await axios.post(`/api/${url}`, post, {
     headers: { Authorization: token },

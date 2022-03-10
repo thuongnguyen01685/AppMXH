@@ -12,8 +12,9 @@ import {
   unLikeComment,
   updateComment,
 } from "../../../redux/actions/commentAction";
+import InputComment from "../InputComment";
 
-const CommentCard = ({ comment, post }) => {
+const CommentCard = ({ children, comment, post, commentId }) => {
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
 
@@ -24,8 +25,12 @@ const CommentCard = ({ comment, post }) => {
   const [onEdit, setOnEdit] = useState(false);
   const [loadLike, setLoadLike] = useState(false);
 
+  const [onReply, setOnReply] = useState(false);
+
   useEffect(() => {
     setContent(comment.content);
+    setIsLike(false);
+    setOnReply(false);
     if (comment.likes.find((like) => like._id === auth.user._id)) {
       setIsLike(true);
     }
@@ -57,6 +62,15 @@ const CommentCard = ({ comment, post }) => {
       setOnEdit(false);
     }
   };
+  const handleCancel = () => {
+    setOnEdit(false);
+    setContent(comment.content);
+  };
+
+  const handleReply = () => {
+    if (onReply) return setOnReply(false);
+    setOnReply({ ...comment, commentId });
+  };
   return (
     <div className="comment_card mt-2" style={styleCard}>
       <Link to={`/profile/${comment.user._id}`} className="d-flex text-dark">
@@ -73,6 +87,11 @@ const CommentCard = ({ comment, post }) => {
             />
           ) : (
             <div>
+              {comment.tag && comment.tag._id !== comment.user._id && (
+                <Link to={`/profile/${comment.tag._id}`} className="mr-1">
+                  @{comment.tag.fullname}
+                </Link>
+              )}
               <span>
                 {content.length < 100
                   ? content
@@ -98,14 +117,19 @@ const CommentCard = ({ comment, post }) => {
 
             {onEdit ? (
               <>
-                <small className="font-weight-bold mr-3" onClick={handleUpdate}>
-                  Chỉnh sửa
-                </small>
-                <small
+                <button
                   className="font-weight-bold mr-3"
-                  onClick={() => setOnEdit(false)}>
+                  disabled={content.length !== 0 ? false : true}
+                  onClick={handleUpdate}
+                  style={{ border: "none", outline: "none" }}>
+                  Chỉnh sửa
+                </button>
+                <button
+                  className="font-weight-bold mr-3"
+                  onClick={handleCancel}
+                  style={{ border: "none", outline: "none" }}>
                   Đóng
-                </small>
+                </button>
               </>
             ) : (
               <>
@@ -115,9 +139,11 @@ const CommentCard = ({ comment, post }) => {
                   handleUnLike={handleUnLike}
                 />
                 <small className="font-weight-bold ml-2 mr-3">
-                  {comment.likes.length} likes
+                  {comment.likes.length} Likes
                 </small>
-                <small className="font-weight-bold mr-3">reply</small>
+                <small className="font-weight-bold mr-3" onClick={handleReply}>
+                  {onReply ? "Đóng" : "Phản hồi"}
+                </small>
               </>
             )}
           </div>
@@ -125,14 +151,17 @@ const CommentCard = ({ comment, post }) => {
         <div
           className="d-flex align-items-center"
           style={{ cursor: "pointer" }}>
-          <CommentMenu
-            post={post}
-            comment={comment}
-            auth={auth}
-            setOnEdit={setOnEdit}
-          />
+          <CommentMenu post={post} comment={comment} setOnEdit={setOnEdit} />
         </div>
       </div>
+      {onReply && (
+        <InputComment post={post} onReply={onReply} setOnReply={setOnReply}>
+          <Link to={`/profile/${onReply.user._id}`} className="mr-1">
+            @{onReply.user.fullname}
+          </Link>
+        </InputComment>
+      )}
+      {children}
     </div>
   );
 };

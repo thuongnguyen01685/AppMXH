@@ -12,6 +12,7 @@ import Register from "./pages/register";
 import PrivateRouter from "./customRouter/PrivateRouter";
 import StatusModal from "./components/StatusModal";
 import { getPosts } from "./redux/actions/postAction";
+import { getBlogs } from "./redux/actions/blogAction";
 
 function App() {
   const { auth, status, modal } = useSelector((state) => state);
@@ -22,6 +23,9 @@ function App() {
   }, [dispatch]);
   useEffect(() => {
     if (auth.token) dispatch(getPosts(auth.token));
+  }, [dispatch, auth.token]);
+  useEffect(() => {
+    if (auth.token) dispatch(getBlogs());
   }, [dispatch, auth.token]);
 
   return (

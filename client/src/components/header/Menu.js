@@ -8,9 +8,9 @@ import Avatar from "../Avatar";
 const Menu = () => {
   const navLinks = [
     { lable: "Home", icon: "home", path: "/" },
-    { lable: "Message", icon: "near_me", path: "/message" },
+    { lable: "Message", icon: "chat", path: "/message" },
     { lable: "Discover", icon: "explore", path: "/discover" },
-    { lable: "Notify", icon: "favorite", path: "/notify" },
+    { lable: "Notify", icon: "notifications_none", path: "/notify" },
   ];
   const { auth, theme } = useSelector((state) => state);
   const dispatch = useDispatch();

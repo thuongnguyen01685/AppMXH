@@ -88,3 +88,12 @@ export const unLikeComment =
       });
     }
   };
+export const deleteComment =
+  ({ post, auth, comment }) =>
+  async (dispatch) => {
+    const deleteArr = [
+      ...post.comments.filter((cm) => cm.reply === comment._id),
+      comment,
+    ];
+    console.log(deleteArr);
+  };

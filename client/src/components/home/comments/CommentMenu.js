@@ -1,6 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { deleteComment } from "../../../redux/actions/commentAction";
 
-const CommentMenu = ({ post, comment, auth, setOnEdit }) => {
+const CommentMenu = ({ post, comment, setOnEdit }) => {
+  const dispatch = useDispatch();
+
+  const { auth } = useSelector((state) => state);
+
   const MenuItem = () => {
     return (
       <>
@@ -13,6 +20,9 @@ const CommentMenu = ({ post, comment, auth, setOnEdit }) => {
         </div>
       </>
     );
+  };
+  const handleRemove = () => {
+    dispatch(deleteComment({ post, auth, comment }));
   };
   return (
     <div className="menu">
@@ -27,8 +37,9 @@ const CommentMenu = ({ post, comment, auth, setOnEdit }) => {
               comment.user._id === auth.user._id ? (
                 MenuItem()
               ) : (
-                <div className="dropdown-item del">
-                  <span className="material-icons ">delete_outline</span> Remove
+                <div className="dropdown-item" onClick={handleRemove}>
+                  <span className="material-icons">delete_outline</span>
+                  Remove
                 </div>
               )
             ) : (

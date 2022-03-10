@@ -6,6 +6,7 @@ import profile from "./profileReducer";
 import status from "./statusReducer";
 import homePost from "./postReducer";
 import modal from "./modalReducer";
+import blog from "./blogReducer";
 
 export default combineReducers({
   auth,
@@ -15,4 +16,5 @@ export default combineReducers({
   status,
   homePost,
   modal,
+  blog,
 });
