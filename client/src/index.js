@@ -4,6 +4,7 @@ import "./styles/global.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import DataProvider from "./redux/store";
+import { useSelector } from "react-redux";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -11,6 +12,7 @@ ReactDOM.render(
       <App />
     </DataProvider>
   </React.StrictMode>,
+
   document.getElementById("root")
 );
 

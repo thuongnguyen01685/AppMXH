@@ -15,14 +15,16 @@ const CommentMenu = ({ post, comment, setOnEdit }) => {
           <span className="material-icons ">create</span>
           Edit
         </div>
-        <div className="dropdown-item">
+        <div className="dropdown-item" onClick={handleRemove}>
           <span className="material-icons">delete_outline</span> Remove
         </div>
       </>
     );
   };
   const handleRemove = () => {
-    dispatch(deleteComment({ post, auth, comment }));
+    if (post.user._id === auth.user._id || comment.user._id === auth.user._id) {
+      dispatch(deleteComment({ post, auth, comment }));
+    }
   };
   return (
     <div className="menu">

@@ -1,4 +1,8 @@
-import { patchDataAPI, postDataAPI } from "../../utils/fetchData";
+import {
+  deleteDataAPI,
+  patchDataAPI,
+  postDataAPI,
+} from "../../utils/fetchData";
 import { DeleteData, EditData, GLOBALTYPES } from "./globalTypes";
 import { POST_TYPES } from "./postAction";
 
@@ -11,7 +15,11 @@ export const createComment =
       payload: newPost,
     });
     try {
-      const data = { ...newComment, postId: post._id };
+      const data = {
+        ...newComment,
+        postId: post._id,
+        postUserId: post.user._id,
+      };
       const res = await postDataAPI("comment", data, auth.token);
 
       const newData = { ...res.data.newComment, user: auth.user };
@@ -95,5 +103,19 @@ export const deleteComment =
       ...post.comments.filter((cm) => cm.reply === comment._id),
       comment,
     ];
-    console.log(deleteArr);
+
+    const newPost = {
+      ...post,
+      comments: post.comments.filter(
+        (cm) => !deleteArr.find((data) => cm._id === data._id)
+      ),
+    };
+    dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+    try {
+      deleteArr.forEach((item) => {
+        deleteDataAPI(`comment/${item._id}`, auth.token);
+      });
+    } catch (error) {
+      dispatch({ type: GLOBALTYPES.ALERT, error: error.response.data.msg });
+    }
   };
