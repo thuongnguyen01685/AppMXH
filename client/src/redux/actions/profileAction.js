@@ -3,29 +3,42 @@ import { imageUpload } from "../../utils/imageUpload";
 import { GLOBALTYPES, DeleteData, EditData } from "./globalTypes";
 
 export const PROFILE_TYPES = {
-  LOADING: "LOADING",
-  GET_USER: "GET_USER",
+  LOADING: "LOADING_PROFILE",
+  GET_USER: "GET_PROFILE_USER",
   GET_ID: "GET_PROFILE_ID",
   FOLLOW: "FOLLOW",
   UNFOLLOW: "UNFOLLOW",
+  GET_POST: "GET_PROFILE_POST",
 };
 
 export const getProfileUsers =
-  ({ users, id, auth }) =>
+  ({ id, auth }) =>
   async (dispatch) => {
-    if (users.every((user) => user._id !== id)) {
-      try {
-        dispatch({ type: PROFILE_TYPES.LOADING, payload: true });
-        const res = await getDataAPI(`/user/${id}`, auth.token);
-        dispatch({ type: PROFILE_TYPES.GET_USER, payload: res.data });
-        dispatch({ type: PROFILE_TYPES.LOADING, payload: false });
-      } catch (error) {
-        dispatch({
-          type: GLOBALTYPES.ALERT,
-          payload: { error: error.response.data.msg },
-        });
-      }
+    // if (users.every((user) => user._id !== id)) {
+    dispatch({ type: PROFILE_TYPES.GET_ID, payload: id });
+
+    try {
+      dispatch({ type: PROFILE_TYPES.LOADING, payload: true });
+      const res = getDataAPI(`/user/${id}`, auth.token);
+      const res1 = getDataAPI(`/user_posts/${id}`, auth.token);
+
+      const users = await res;
+      const posts = await res1;
+
+      dispatch({
+        type: PROFILE_TYPES.GET_POST,
+        payload: { ...posts.data, _id: id, page: 2 },
+      });
+
+      dispatch({ type: PROFILE_TYPES.GET_USER, payload: users.data });
+      dispatch({ type: PROFILE_TYPES.LOADING, payload: false });
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
     }
+    // }
   };
 
 export const updateProfileUser =

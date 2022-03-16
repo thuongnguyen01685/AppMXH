@@ -85,7 +85,7 @@ const commentCtrl = {
         $or: [{ user: req.user._id }, { postUserId: req.user._id }],
       });
 
-      const commentss = await Posts.findOneAndUpdate(
+      await Posts.findOneAndUpdate(
         { _id: comment.postId },
         {
           $pull: { comments: req.params.id },

@@ -19,15 +19,16 @@
     color: white;
 }
 
-.header .logo h1 {
-    font-size: 2rem;
+.header .logo h1:hover {
+    filter: invert(1);
 }
 
 
 /*-------------MENU-------------*/
 
-.header .menu li {
-    opacity: 0.8;
+.header .menu li:hover {
+    opacity: 1;
+    box-shadow: 0 2px black;
 }
 
 .header .menu li.active {
@@ -135,5 +136,6 @@
     }
     .header .logo {
         margin: auto;
+        text-align: center;
     }
 }

@@ -9,8 +9,10 @@ const Home = () => {
   return (
     <div className="home row mx-0">
       <div
-        className="col-md-2"
-        style={{ filter: `${theme ? "invert(1)" : "invert(0)"}` }}>
+        className="col-md-2 "
+        style={{
+          filter: `${theme ? "invert(1)" : "invert(0)"}`,
+        }}>
         <div
           className="ns-xjvxg-e-3 title-line1"
           title="TopCV"

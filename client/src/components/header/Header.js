@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
 import Search from "./Search";
+import logo from "../../images/logo.png";
 
 const Header = () => {
   return (
@@ -11,7 +12,11 @@ const Header = () => {
           <h1
             className="navbar-brand text-uppercase p-0 m-0"
             onClick={() => window.scrollTo({ top: 0 })}>
-            Zahu
+            <img
+              src={logo}
+              alt={logo}
+              style={{ width: "50px", height: "50px" }}
+            />
           </h1>
         </Link>
         <Search />
