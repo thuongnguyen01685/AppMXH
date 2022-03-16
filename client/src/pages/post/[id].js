@@ -20,7 +20,7 @@ const Post = () => {
       const newArr = detailPost.filter((post) => post._id === id);
       setPost(newArr);
     }
-  }, [auth, detailPost, dispatch, id]);
+  }, [detailPost, dispatch, id, auth]);
 
   return (
     <div className="home row mx-0">

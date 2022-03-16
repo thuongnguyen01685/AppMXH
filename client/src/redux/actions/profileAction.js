@@ -9,6 +9,7 @@ export const PROFILE_TYPES = {
   FOLLOW: "FOLLOW",
   UNFOLLOW: "UNFOLLOW",
   GET_POST: "GET_PROFILE_POST",
+  UPDATE_POST: "UPDATE_PROFILE_POST",
 };
 
 export const getProfileUsers =

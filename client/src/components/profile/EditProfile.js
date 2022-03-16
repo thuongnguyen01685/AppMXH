@@ -93,7 +93,7 @@ const EditProfile = ({ setOnEdit }) => {
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="mobile">Mobile</label>
+          <label htmlFor="mobile">MobilePhone</label>
           <input
             type="text"
             name="mobile"
@@ -103,7 +103,7 @@ const EditProfile = ({ setOnEdit }) => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="address">Address</label>
+          <label htmlFor="address">Địa Chỉ</label>
           <input
             type="text"
             name="address"

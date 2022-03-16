@@ -38,9 +38,22 @@
     align-items: center;
     opacity: 0;
     transition: 0.3s;
+    flex-direction: column;
 }
 
-.post_thumb_display:hover .post_thumb_menu {
+.content {
+    position: absolute;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    top: 10px;
+    margin-top: 180px;
+    text-align: center;
+}
+
+.post_thumb_display:hover .post_thumb_menu,
+content {
     opacity: 1;
 }
 

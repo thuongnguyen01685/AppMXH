@@ -42,7 +42,7 @@ const InputComment = ({ children, post, onReply, setOnReply }) => {
         type="submit"
         className="postBtn btn btn-info"
         disabled={content !== "" ? false : true}>
-        Post
+        Đăng
       </button>
     </form>
   );

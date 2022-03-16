@@ -13,10 +13,10 @@ const CommentMenu = ({ post, comment, setOnEdit }) => {
       <>
         <div className="dropdown-item" onClick={() => setOnEdit(true)}>
           <span className="material-icons ">create</span>
-          Edit
+          Sửa bài viết
         </div>
         <div className="dropdown-item" onClick={handleRemove}>
-          <span className="material-icons">delete_outline</span> Remove
+          <span className="material-icons">delete_outline</span> Xóa bài viết
         </div>
       </>
     );
@@ -41,7 +41,7 @@ const CommentMenu = ({ post, comment, setOnEdit }) => {
               ) : (
                 <div className="dropdown-item" onClick={handleRemove}>
                   <span className="material-icons">delete_outline</span>
-                  Remove
+                  Xóa bài viết
                 </div>
               )
             ) : (

@@ -42,6 +42,11 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         posts: [...state.posts, action.payload],
       };
+    case PROFILE_TYPES.UPDATE_POST:
+      return {
+        ...state,
+        posts: EditData(state.posts, action.payload._id, action.payload),
+      };
     default:
       return state;
   }

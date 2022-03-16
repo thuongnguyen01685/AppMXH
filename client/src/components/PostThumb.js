@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 const PostThumb = ({ posts, result }) => {
   const { theme } = useSelector((state) => state);
   if (result === 0) return <h2 className="text-center">Không có bài viết.</h2>;
+
   return (
     <div className="post_thumb">
       {posts.map((post) => (
@@ -16,8 +17,11 @@ const PostThumb = ({ posts, result }) => {
               style={{ filter: theme ? "invert(1)" : "invert(0)" }}
             />
             <div className="post_thumb_menu">
-              <i className="far fa-heart">{post.likes.length}</i>
-              <i className="far fa-comment">{post.comments.length}</i>
+              <div className="menu d-flex">
+                <i className="far fa-heart">{post.likes.length}</i>
+                <i className="far fa-comment">{post.comments.length}</i>
+              </div>
+              <p className="content text-white">{post.content}</p>
             </div>
           </div>
         </Link>
