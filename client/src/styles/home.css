@@ -75,7 +75,16 @@
 
 @media (min-width: 768px) {
     .col-md-6 {
-        left: 35px;
+        left: 20px;
+    }
+    .col-md-4 {
+        max-width: 50%!important;
+    }
+}
+
+@media (max-width: 900px) {
+    .col-md-2 {
+        display: none;
     }
 }
 

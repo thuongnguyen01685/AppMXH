@@ -9,6 +9,7 @@ import modal from "./modalReducer";
 import blog from "./blogReducer";
 import detailPost from "./detailPostReducer";
 import discover from "./discoverReducer";
+import suggestions from "./suggestionReducer";
 
 export default combineReducers({
   auth,
@@ -21,4 +22,5 @@ export default combineReducers({
   blog,
   detailPost,
   discover,
+  suggestions,
 });

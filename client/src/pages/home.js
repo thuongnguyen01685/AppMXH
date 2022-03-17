@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Posts from "../components/home/Posts";
+import RightSidebar from "../components/home/RightSidebar";
 import Status from "../components/home/Status";
 import LoadIcon from "../images/loading.gif";
 
@@ -44,7 +45,9 @@ const Home = () => {
           <Posts />
         )}
       </div>
-      <div className="col-md-4 text-center mt-3">Đề xuất bạn bè mới</div>
+      <div className="col-md-4" style={{ padding: "0 50px" }}>
+        <RightSidebar />
+      </div>
     </div>
   );
 };
