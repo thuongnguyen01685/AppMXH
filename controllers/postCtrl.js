@@ -53,6 +53,7 @@ const postCtrl = {
             select: "-password",
           },
         });
+
       res.json({
         msg: "Success!",
         result: posts.length,
@@ -105,13 +106,16 @@ const postCtrl = {
 
       if (post.length > 0)
         return res.status(400).json({ msg: "You liked this post." });
-      await Posts.findByIdAndUpdate(
+
+      const like = await Posts.findByIdAndUpdate(
         { _id: req.params.id },
         {
           $push: { likes: req.user._id },
         },
         { new: true }
       );
+      if (!like)
+        return res.status(400).json({ msg: "This post does not exits." });
       res.json({ msg: "Liked post !" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
@@ -119,13 +123,15 @@ const postCtrl = {
   },
   unLikePost: async (req, res) => {
     try {
-      await Posts.findByIdAndUpdate(
+      const unlike = await Posts.findByIdAndUpdate(
         { _id: req.params.id },
         {
           $pull: { likes: req.user._id },
         },
         { new: true }
       );
+      if (!unlike)
+        return res.status(400).json({ msg: "This post does not exits." });
       res.json({ msg: "UnLiked post !" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
@@ -154,6 +160,9 @@ const postCtrl = {
             select: "-password",
           },
         });
+      if (!post)
+        return res.status(400).json({ msg: "This post does not exits." });
+
       res.json({
         post,
       });
@@ -183,19 +192,21 @@ const postCtrl = {
   },
   deletePost: async (req, res) => {
     try {
-      const post = await Posts.findByIdAndDelete({
-        _id: req.params._id,
+      const post = await Posts.findOneAndDelete({
+        _id: req.params.id,
         user: req.user._id,
       });
-      await Comments.res.json({
-        msg: "Deleted Post",
+      await Comments.deleteMany({ _id: { $in: post.comments } });
+
+      res.json({
+        msg: "Deleted Post!",
         newPost: {
           ...post,
           user: req.user,
         },
       });
-    } catch (error) {
-      return res.status(500).json({ msg: error.message });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
     }
   },
 };

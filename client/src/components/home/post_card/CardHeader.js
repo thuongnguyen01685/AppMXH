@@ -1,16 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../Avatar";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { GLOBALTYPES } from "../../../redux/actions/globalTypes";
 import { useDispatch } from "react-redux";
+import { deletePost } from "../../../redux/actions/postAction";
+import { BASE_URL } from "../../../utils/config";
 
 const CardHeader = ({ post }) => {
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  const history = useHistory();
   const handleEditPost = () => {
     dispatch({ type: GLOBALTYPES.STATUS, payload: { ...post, onEdit: true } });
+  };
+  const handleDeletePost = () => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
+      dispatch(deletePost({ post, auth }));
+      return history.push("/");
+    }
+  };
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${BASE_URL}/post/${post._id}`);
   };
   return (
     <div className="card_header">
@@ -37,15 +50,15 @@ const CardHeader = ({ post }) => {
             <>
               <div className="dropdown-item" onClick={handleEditPost}>
                 <span className="material-icons">create</span>
-                Edit post
+                Sửa bài viết
               </div>
-              <div className="dropdown-item">
-                <span className="material-icons">delete_outline</span>Remove
-                post
+              <div className="dropdown-item" onClick={handleDeletePost}>
+                <span className="material-icons">delete_outline</span>Xoá bài
+                viết
               </div>
             </>
           )}
-          <div className="dropdown-item">
+          <div className="dropdown-item" onClick={handleCopyLink}>
             <span className="material-icons">content_copy</span>Copy link
           </div>
         </div>

@@ -44,7 +44,7 @@ const Home = () => {
           <Posts />
         )}
       </div>
-      <div className="col-md-4"></div>
+      <div className="col-md-4 text-center mt-3">Đề xuất bạn bè mới</div>
     </div>
   );
 };

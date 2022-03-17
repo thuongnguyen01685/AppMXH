@@ -5,14 +5,18 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Send from "../../../images/send.svg";
 import { likePost, unLikePost } from "../../../redux/actions/postAction";
+import { BASE_URL } from "../../../utils/config";
 import LikeButton from "../../LikeButton";
+import ShareModal from "../../ShareModal";
 
 const CardFooter = ({ post }) => {
   const [isLike, setIsLike] = useState(false);
   const [loadLike, setLoadLike] = useState(false);
+  const [isShare, setIsShare] = useState(false);
+
   const dispatch = useDispatch();
 
-  const { auth } = useSelector((state) => state);
+  const { auth, theme } = useSelector((state) => state);
 
   const handleLike = async () => {
     if (loadLike) return;
@@ -45,18 +49,21 @@ const CardFooter = ({ post }) => {
           <Link to={`/post/${post._id}`} className="text-dark">
             <i className="far fa-comment" />
           </Link>
-          <img src={Send} alt="Send" />
+          <img src={Send} alt="Send" onClick={() => setIsShare(!isShare)} />
         </div>
         <i className="far fa-bookmark" />
       </div>
       <div className="d-flex justify-content-between">
         <h6 style={{ padding: "0 25px", cursor: "pointer" }}>
-          {post.likes.length} likes
+          {post.likes.length} lượt thích
         </h6>
         <h6 style={{ padding: "0 25px", cursor: "pointer" }}>
-          {post.comments.length} comments
+          {post.comments.length} Bình luận
         </h6>
       </div>
+      {isShare && (
+        <ShareModal url={`${BASE_URL}/post/${post._id}`} theme={theme} />
+      )}
     </div>
   );
 };
