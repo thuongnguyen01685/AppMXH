@@ -42,7 +42,7 @@ function App() {
           {status && <StatusModal />}
           <Route exact path="/" component={auth.token ? Home : Login} />
           <Route exact path="/register" component={Register} />
-          <div style={{ marginBottom: "60px" }}>
+          <div className="wrap_page">
             <PrivateRouter exact path="/:page" component={PageRender} />
             <PrivateRouter exact path="/:page/:id" component={PageRender} />
           </div>

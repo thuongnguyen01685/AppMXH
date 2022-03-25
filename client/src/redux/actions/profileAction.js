@@ -140,10 +140,23 @@ export const follow =
 export const unfollow =
   ({ users, user, auth }) =>
   async (dispatch) => {
-    let newUser = {
-      ...user,
-      followers: DeleteData(user.followers, auth.user._id),
-    };
+    let newUser;
+
+    if (users.every((item) => item._id !== user._id)) {
+      newUser = {
+        ...user,
+        followers: DeleteData(user.followers, auth.user._id),
+      };
+    } else {
+      users.forEach((item) => {
+        if (item._id === user._id) {
+          newUser = {
+            ...item,
+            followers: DeleteData(item.followers, auth.user._id),
+          };
+        }
+      });
+    }
     dispatch({
       type: PROFILE_TYPES.UNFOLLOW,
       payload: newUser,

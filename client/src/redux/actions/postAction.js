@@ -159,11 +159,47 @@ export const deletePost =
   async (dispatch) => {
     dispatch({ type: POST_TYPES.DELETE_POST, payload: post });
     try {
-      deleteDataAPI(`post/${post._id}`, auth.token);
+      await deleteDataAPI(`post/${post._id}`, auth.token);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
         payload: { error: error.response.data.msg },
+      });
+    }
+  };
+export const savePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    const newUser = { ...auth.user, saved: [...auth.user.saved, post._id] };
+
+    dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
+
+    try {
+      await patchDataAPI(`savePost/${post._id}`, null, auth.token);
+    } catch (err) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: err.response.data.msg },
+      });
+    }
+  };
+
+export const unSavePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    const newUser = {
+      ...auth.user,
+      saved: auth.user.saved.filter((id) => id !== post._id),
+    };
+
+    dispatch({ type: GLOBALTYPES.AUTH, payload: { ...auth, user: newUser } });
+
+    try {
+      await patchDataAPI(`unSavePost/${post._id}`, null, auth.token);
+    } catch (err) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: err.response.data.msg },
       });
     }
   };
