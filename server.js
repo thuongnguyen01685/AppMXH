@@ -9,12 +9,21 @@ const authRouter = require("./routers/authRouter");
 const userRouter = require("./routers/userRouter");
 const postRouter = require("./routers/postRouter");
 const commentRouter = require("./routers/commentRouter");
+const SocketServer = require("./socketServer");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+
+//Socket
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
+
+io.on("connection", (socket) => {
+  SocketServer(socket);
+});
 
 //router
 app.use("/api", authRouter);
@@ -43,6 +52,6 @@ mongoose.connect(
   }
 );
 
-app.listen(port, () => {
+http.listen(port, () => {
   console.log("Server is running on port", port);
 });

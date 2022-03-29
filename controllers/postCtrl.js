@@ -45,7 +45,7 @@ const postCtrl = {
         user: [...req.user.following, req.user._id],
       })
         .sort("-createdAt")
-        .populate("user likes", "avatar username fullname")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
           path: "comments",
           populate: {
@@ -152,7 +152,7 @@ const postCtrl = {
   getPost: async (req, res) => {
     try {
       const post = await Posts.findById(req.params.id)
-        .populate("user likes", "avatar username fullname")
+        .populate("user likes", "avatar username fullname followers")
         .populate({
           path: "comments",
           populate: {
