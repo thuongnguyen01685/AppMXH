@@ -7,7 +7,7 @@ import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { createPost, getPosts, updatePost } from "../redux/actions/postAction";
 
 const StatusModal = () => {
-  const { auth, theme, status } = useSelector((state) => state);
+  const { auth, theme, status, socket } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
@@ -86,7 +86,7 @@ const StatusModal = () => {
     if (status.onEdit) {
       dispatch(updatePost({ content, images, auth, status }));
     } else {
-      dispatch(createPost({ content, images, auth }));
+      dispatch(createPost({ content, images, auth, socket }));
       dispatch(getPosts(auth.token));
     }
     setContent("");

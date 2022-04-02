@@ -173,7 +173,7 @@ export const unfollow =
         },
       },
     });
-
+    socket.emit("unFollow", newUser);
     try {
       const res = patchDataAPI(`user/${user._id}/unfollow`, null, auth.token);
       socket.emit("unFollow", res.data.newUser);
