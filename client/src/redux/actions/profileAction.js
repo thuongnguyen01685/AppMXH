@@ -101,7 +101,7 @@ export const updateProfileUser =
   };
 
 export const follow =
-  ({ users, user, auth }) =>
+  ({ users, user, auth, socket }) =>
   async (dispatch) => {
     let newUser;
 
@@ -128,8 +128,10 @@ export const follow =
         user: { ...auth.user, following: [...auth.user.following, newUser] },
       },
     });
+    socket.emit("follow", newUser);
     try {
-      patchDataAPI(`user/${user._id}/follow`, null, auth.token);
+      const res = patchDataAPI(`user/${user._id}/follow`, null, auth.token);
+      socket.emit("follow", res.data.newUser);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -138,7 +140,7 @@ export const follow =
     }
   };
 export const unfollow =
-  ({ users, user, auth }) =>
+  ({ users, user, auth, socket }) =>
   async (dispatch) => {
     let newUser;
 
@@ -171,8 +173,10 @@ export const unfollow =
         },
       },
     });
+
     try {
-      patchDataAPI(`user/${user._id}/unfollow`, null, auth.token);
+      const res = patchDataAPI(`user/${user._id}/unfollow`, null, auth.token);
+      socket.emit("unFollow", res.data.newUser);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
