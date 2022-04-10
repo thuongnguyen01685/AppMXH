@@ -45,7 +45,7 @@ export const createPost =
 
       const msg = {
         id: res.data.newPost._id,
-        text: "Thêm bài viết mới",
+        text: "Vừa thêm bài viết mới",
         recipients: res.data.newPost.user.followers,
         url: `/post/${res.data.newPost._id}`,
         content,
