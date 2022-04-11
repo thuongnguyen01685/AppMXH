@@ -15,7 +15,7 @@ import {
 import InputComment from "../InputComment";
 
 const CommentCard = ({ children, comment, post, commentId }) => {
-  const { auth } = useSelector((state) => state);
+  const { auth, socket } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const [content, setContent] = useState("");
@@ -43,14 +43,14 @@ const CommentCard = ({ children, comment, post, commentId }) => {
     if (loadLike) return;
     setIsLike(true);
     setLoadLike(true);
-    await dispatch(likeComment({ comment, post, auth }));
+    await dispatch(likeComment({ comment, post, auth, socket }));
     setLoadLike(false);
   };
   const handleUnLike = async () => {
     if (loadLike) return;
     setIsLike(false);
     setLoadLike(true);
-    await dispatch(unLikeComment({ comment, post, auth }));
+    await dispatch(unLikeComment({ comment, post, auth, socket }));
     setLoadLike(false);
   };
 

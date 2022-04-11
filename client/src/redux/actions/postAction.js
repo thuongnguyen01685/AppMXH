@@ -6,7 +6,7 @@ import {
   patchDataAPI,
   postDataAPI,
 } from "../../utils/fetchData";
-import { createNotify, removeNotify } from "./notifyAction";
+import { createNotify, deleteNotify } from "./notifyAction";
 
 export const POST_TYPES = {
   CREATE_POST: "CREATE_POST",
@@ -122,6 +122,17 @@ export const likePost =
     socket.emit("likePost", newPost);
     try {
       await patchDataAPI(`/post/${post._id}/like`, null, auth.token);
+      //Notify
+
+      const msg = {
+        id: auth.user._id,
+        text: "Vừa thích bài viết của bạn",
+        recipients: [post.user._id],
+        url: `/post/${post._id}`,
+        content: post.content,
+        image: post.images[0].url,
+      };
+      dispatch(createNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -147,6 +158,13 @@ export const unLikePost =
 
     try {
       await patchDataAPI(`/post/${post._id}/unlike`, null, auth.token);
+      const msg = {
+        id: auth.user._id,
+        text: "Vừa thích bài viết của bạn",
+        recipients: [post.user._id],
+        url: `/post/${post._id}`,
+      };
+      dispatch(deleteNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -185,7 +203,7 @@ export const deletePost =
         recipients: res.data.newPost.user.followers,
         url: `/post/${post._id}`,
       };
-      dispatch(removeNotify({ msg, auth, socket }));
+      dispatch(deleteNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,

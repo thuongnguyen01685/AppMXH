@@ -5,6 +5,8 @@ const notifyCtrl = {
     try {
       const { id, recipients, url, text, content, image } = req.body;
 
+      if (recipients.includes(req.user._id.toString())) return;
+
       const notify = await new Notifies({
         id,
         recipients,
@@ -34,7 +36,7 @@ const notifyCtrl = {
   getNotifies: async (req, res) => {
     try {
       const notifies = await Notifies.find({ recipients: req.user._id })
-        .sort("isRead")
+        .sort("-createdAt")
         .populate("user", "avatar username fullname");
       return res.json({ notifies });
     } catch (error) {

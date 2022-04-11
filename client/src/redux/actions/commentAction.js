@@ -4,6 +4,7 @@ import {
   postDataAPI,
 } from "../../utils/fetchData";
 import { DeleteData, EditData, GLOBALTYPES } from "./globalTypes";
+import { createNotify, deleteNotify } from "./notifyAction";
 import { POST_TYPES } from "./postAction";
 
 export const createComment =
@@ -31,6 +32,20 @@ export const createComment =
       });
       //socket
       socket.emit("createComment", newPost);
+
+      //Notify
+
+      const msg = {
+        id: res.data.newComment._id,
+        text: newComment.reply
+          ? "Vừa trả lời bình luận của bạn"
+          : "Vừa bình luận bài viết của bạn",
+        recipients: newComment.reply ? [newComment.tag._id] : [post.user._id],
+        url: `/post/${post._id}`,
+        content: post.content,
+        image: post.images[0].url,
+      };
+      dispatch(createNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -58,7 +73,7 @@ export const updateComment =
     }
   };
 export const likeComment =
-  ({ comment, post, auth }) =>
+  ({ comment, post, auth, socket }) =>
   async (dispatch) => {
     const newComment = { ...comment, likes: [...comment.likes, auth.user] };
 
@@ -69,6 +84,17 @@ export const likeComment =
     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
     try {
       await patchDataAPI(`comment/${comment._id}/like`, null, auth.token);
+      //Notify
+
+      const msg = {
+        id: comment._id,
+        text: comment.reply
+          ? "Vừa thích câu trả lời bình luận của bạn"
+          : "Vừa thích bình luận bài viết của bạn",
+        recipients: comment.reply ? [comment.tag._id] : [post.user._id],
+        url: `/post/${post._id}`,
+      };
+      dispatch(createNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -77,7 +103,7 @@ export const likeComment =
     }
   };
 export const unLikeComment =
-  ({ comment, post, auth }) =>
+  ({ comment, post, auth, socket }) =>
   async (dispatch) => {
     const newComment = {
       ...comment,
@@ -91,6 +117,17 @@ export const unLikeComment =
     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
     try {
       await patchDataAPI(`comment/${comment._id}/unlike`, null, auth.token);
+      //Notify
+
+      const msg = {
+        id: comment._id,
+        text: comment.reply
+          ? "Vừa thích câu trả lời bình luận của bạn"
+          : "Vừa thích bình luận bài viết của bạn",
+        recipients: comment.reply ? [comment.tag._id] : [post.user._id],
+        url: `/post/${post._id}`,
+      };
+      dispatch(deleteNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -119,6 +156,17 @@ export const deleteComment =
     try {
       deleteArr.forEach((item) => {
         deleteDataAPI(`comment/${item._id}`, auth.token);
+        //Notify
+
+        const msg = {
+          id: item._id,
+          text: comment.reply
+            ? "Vừa trả lời bình luận của bạn"
+            : "Vừa bình luận bài viết của bạn",
+          recipients: comment.reply ? [comment.tag._id] : [post.user._id],
+          url: `/post/${post._id}`,
+        };
+        dispatch(deleteNotify({ msg, auth, socket }));
       });
     } catch (error) {
       dispatch({ type: GLOBALTYPES.ALERT, error: error.response.data.msg });

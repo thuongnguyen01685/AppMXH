@@ -1,6 +1,7 @@
 import { getDataAPI, patchDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
 import { GLOBALTYPES, DeleteData, EditData } from "./globalTypes";
+import { createNotify, deleteNotify } from "./notifyAction";
 
 export const PROFILE_TYPES = {
   LOADING: "LOADING_PROFILE",
@@ -128,10 +129,24 @@ export const follow =
         user: { ...auth.user, following: [...auth.user.following, newUser] },
       },
     });
-    socket.emit("follow", newUser);
+    //socket.emit("follow", newUser);
     try {
-      const res = patchDataAPI(`user/${user._id}/follow`, null, auth.token);
+      const res = await patchDataAPI(
+        `user/${user._id}/follow`,
+        null,
+        auth.token
+      );
       socket.emit("follow", res.data.newUser);
+
+      //Notify
+
+      const msg = {
+        id: auth.user._id,
+        text: "Bắt đầu theo dõi bạn",
+        recipients: [newUser._id],
+        url: `/profile/${auth.user._id}`,
+      };
+      dispatch(createNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -175,8 +190,22 @@ export const unfollow =
     });
     socket.emit("unFollow", newUser);
     try {
-      const res = patchDataAPI(`user/${user._id}/unfollow`, null, auth.token);
+      const res = await patchDataAPI(
+        `user/${user._id}/unfollow`,
+        null,
+        auth.token
+      );
       socket.emit("unFollow", res.data.newUser);
+
+      //Notify
+
+      const msg = {
+        id: auth.user._id,
+        text: "Bắt đầu theo dõi bạn",
+        recipients: [newUser._id],
+        url: `/profile/${auth.user._id}`,
+      };
+      dispatch(deleteNotify({ msg, auth, socket }));
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
