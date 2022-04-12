@@ -43,6 +43,29 @@ const notifyCtrl = {
       return res.status(500).json({ msg: error.message });
     }
   },
+  isReadNotify: async (req, res) => {
+    try {
+      const notifies = await Notifies.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          isRead: true,
+        }
+      );
+
+      return res.json({ notifies });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
+  deleteAllNotifies: async (req, res) => {
+    try {
+      const notifies = await Notifies.deleteMany({ recipients: req.user._id });
+
+      return res.json({ notifies });
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 module.exports = notifyCtrl;
