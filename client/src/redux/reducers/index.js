@@ -12,6 +12,7 @@ import discover from "./discoverReducer";
 import suggestions from "./suggestionReducer";
 import socket from "./socketReducer";
 import notify from "./notifyReducer";
+import message from "./messengerReducer";
 
 export default combineReducers({
   auth,
@@ -27,4 +28,5 @@ export default combineReducers({
   suggestions,
   socket,
   notify,
+  message,
 });

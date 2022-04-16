@@ -15,7 +15,7 @@ import {
 import InputComment from "../InputComment";
 
 const CommentCard = ({ children, comment, post, commentId }) => {
-  const { auth, socket } = useSelector((state) => state);
+  const { auth, socket, theme } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const [content, setContent] = useState("");
@@ -78,7 +78,12 @@ const CommentCard = ({ children, comment, post, commentId }) => {
         <h6 className="mx-1">{comment.user.fullname}</h6>
       </Link>
       <div className="comment_content">
-        <div className="flex-fill">
+        <div
+          className="flex-fill"
+          style={{
+            filter: theme ? "invert(1)" : "invert(0)",
+            color: theme ? "white" : "#111",
+          }}>
           {onEdit ? (
             <textarea
               row="5"
@@ -133,11 +138,6 @@ const CommentCard = ({ children, comment, post, commentId }) => {
               </>
             ) : (
               <>
-                <LikeButton
-                  isLike={isLike}
-                  handleLike={handleLike}
-                  handleUnLike={handleUnLike}
-                />
                 <small className="font-weight-bold ml-2 mr-3">
                   {comment.likes.length} Likes
                 </small>
@@ -149,9 +149,14 @@ const CommentCard = ({ children, comment, post, commentId }) => {
           </div>
         </div>
         <div
-          className="d-flex align-items-center"
+          className="d-flex align-items-center mx-2"
           style={{ cursor: "pointer" }}>
           <CommentMenu post={post} comment={comment} setOnEdit={setOnEdit} />
+          <LikeButton
+            isLike={isLike}
+            handleLike={handleLike}
+            handleUnLike={handleUnLike}
+          />
         </div>
       </div>
       {onReply && (

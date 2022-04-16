@@ -8,7 +8,7 @@ import LoadMoreBtn from "../LoadMoreBtn";
 import { useDispatch } from "react-redux";
 
 const Posts = () => {
-  const { homePost, auth } = useSelector((state) => state);
+  const { homePost, auth, theme } = useSelector((state) => state);
   const [load, setLoad] = useState(false);
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ const Posts = () => {
   return (
     <div className="posts">
       {homePost.posts.map((post) => (
-        <PostCard key={post._id} post={post} />
+        <PostCard key={post._id} post={post} theme={theme} />
       ))}
       {/* {load && <img src={LoadIcon} alt="loading" className="d-block mx-auto" />}
 

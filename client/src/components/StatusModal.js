@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { createPost, getPosts, updatePost } from "../redux/actions/postAction";
+import Icons from "./Icons";
 
 const StatusModal = () => {
   const { auth, theme, status, socket } = useSelector((state) => state);
@@ -24,15 +25,12 @@ const StatusModal = () => {
 
     files.forEach((file) => {
       if (!file) return (err = "File does not exits.");
-      if (
-        file.type !== "image/jpeg" &&
-        file.type !== "image/png" &&
-        file.type !== "video/wmv"
-      ) {
-        return (err = "Image format is inccorecr.");
+      if (file.size > 1024 * 1024 * 100) {
+        return (err = "The image largest is 100mb.");
       }
       return newImages.push(file);
     });
+
     if (err) dispatch({ type: GLOBALTYPES.ALERT, payload: { error: err } });
     setImages([...images, ...newImages]);
   };
@@ -41,6 +39,31 @@ const StatusModal = () => {
     const newArr = [...images];
     newArr.splice(index, 1);
     setImages(newArr);
+  };
+
+  const imageShow = (src) => {
+    return (
+      <>
+        <img
+          src={src}
+          alt="images"
+          className="img-thumbnail"
+          style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+        />
+      </>
+    );
+  };
+
+  const videoShow = (src) => {
+    return (
+      <video
+        controls
+        src={src}
+        alt="images"
+        className="img-thumbnail"
+        style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+      />
+    );
   };
 
   const handleStream = () => {
@@ -111,7 +134,10 @@ const StatusModal = () => {
           <span
             onClick={() =>
               dispatch({ type: GLOBALTYPES.STATUS, payload: false })
-            }>
+            }
+            style={{
+              filter: theme ? "invert(1)" : "invert(0)",
+            }}>
             &times;
           </span>
         </div>
@@ -121,22 +147,34 @@ const StatusModal = () => {
             value={content}
             placeholder={`${auth.user.username}, Bạn đang nghĩ gì ?`}
             onChange={(e) => setContent(e.target.value)}
+            style={{
+              filter: theme ? "invert(1)" : "invert(0)",
+              color: theme ? "white" : "#111",
+              background: theme ? "rgba(0,0,0,.03)" : "",
+            }}
           />
+          <div className="d-flex">
+            <div className="flex-fill"></div>
+            <Icons setContent={setContent} content={content} theme={theme} />
+          </div>
           <div className="show_images">
             {images.map((img, index) => (
               <div key={index} id="file_img">
-                <img
-                  src={
-                    img.camera
-                      ? img.camera
-                      : img.url
-                      ? img.url
-                      : URL.createObjectURL(img)
-                  }
-                  alt="images"
-                  className="image-thumbnail"
-                  style={{ filter: theme ? "invert(1)" : "invert(0)" }}
-                />
+                {img.camera ? (
+                  imageShow(img.camera, theme)
+                ) : img.url ? (
+                  <>
+                    {img.url.match(/video/i)
+                      ? videoShow(img.url, theme)
+                      : imageShow(img.url, theme)}
+                  </>
+                ) : (
+                  <>
+                    {img.type.match(/video/i)
+                      ? videoShow(URL.createObjectURL(img), theme)
+                      : imageShow(URL.createObjectURL(img), theme)}
+                  </>
+                )}
                 <span onClick={() => deleteImages(index)}>&times;</span>
               </div>
             ))}
