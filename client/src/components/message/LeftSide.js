@@ -9,7 +9,7 @@ import UserCard from "../UserCard";
 import { addUser } from "../../redux/actions/messageAction";
 
 const LeftSide = () => {
-  const { auth, message } = useSelector((state) => state);
+  const { auth, message, theme } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
@@ -75,7 +75,7 @@ const LeftSide = () => {
                 key={user._id}
                 className={`message_user ${isActive(user)}`}
                 onClick={() => handleAddUser(user)}>
-                <UserCard user={user}>
+                <UserCard user={user} msg={true} theme={theme}>
                   <i className="fas fa-circle" />
                 </UserCard>
               </div>

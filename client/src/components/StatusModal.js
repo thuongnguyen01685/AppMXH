@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { createPost, getPosts, updatePost } from "../redux/actions/postAction";
+import { imageShow, videoShow } from "../utils/mediaShow";
 import Icons from "./Icons";
 
 const StatusModal = () => {
@@ -39,31 +40,6 @@ const StatusModal = () => {
     const newArr = [...images];
     newArr.splice(index, 1);
     setImages(newArr);
-  };
-
-  const imageShow = (src) => {
-    return (
-      <>
-        <img
-          src={src}
-          alt="images"
-          className="img-thumbnail"
-          style={{ filter: theme ? "invert(1)" : "invert(0)" }}
-        />
-      </>
-    );
-  };
-
-  const videoShow = (src) => {
-    return (
-      <video
-        controls
-        src={src}
-        alt="images"
-        className="img-thumbnail"
-        style={{ filter: theme ? "invert(1)" : "invert(0)" }}
-      />
-    );
   };
 
   const handleStream = () => {

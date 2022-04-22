@@ -1,19 +1,33 @@
 import React from "react";
+import { imageShow, videoShow } from "../../utils/mediaShow";
 import Avatar from "../Avatar";
 
-const MsgDisplay = ({ user }) => {
+const MsgDisplay = ({ user, msg, theme }) => {
   return (
     <>
       <div className="chat_title">
         <Avatar src={user.avatar} size="small-avatar" />
         <span>{user.fullname}</span>
       </div>
-      <div className="chat_text">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consectetur
-        deleniti, unde in quidem esse alias, quam qui ipsum veritatis saepe
-        dolorem rerum optio soluta minima nobis facere. Tenetur, ducimus cum?
+      {msg.text && (
+        <div
+          className="chat_text"
+          style={{ filter: theme ? "invert(1)" : "invert(0)" }}>
+          {msg.text}
+        </div>
+      )}
+
+      {msg.media.map((item, index) => (
+        <div key={index}>
+          {item.url.match(/video/i)
+            ? videoShow(item.url, theme)
+            : imageShow(item.url, theme)}
+        </div>
+      ))}
+
+      <div className="chat_time">
+        {new Date(msg.createdAt).toLocaleString()}
       </div>
-      <div className="chat_time">Tháng 4 2022</div>
     </>
   );
 };

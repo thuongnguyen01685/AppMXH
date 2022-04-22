@@ -9,6 +9,8 @@ const UserCard = ({
   border,
   setShowFollowers,
   setShowFollowing,
+  msg,
+  theme,
 }) => {
   const handleCloseAll = () => {
     if (handleClose) handleClose();
@@ -28,7 +30,23 @@ const UserCard = ({
           <div className="ml-1" style={{ transform: "translateY(-2px)" }}>
             <span className="d-block">{user.fullname}</span>
 
-            <small style={{ opacity: 0.7 }}>{user.username}</small>
+            <small style={{ opacity: 0.7 }}>
+              {msg ? (
+                <>
+                  <div style={{ filter: theme ? "invert(1)" : "invert(0)" }}>
+                    {user.text}
+                  </div>
+                  {/* {user.media.length > 0 && (
+                    <div>
+                      Đã nhận {user.media.length} ảnh{" "}
+                      <i className="fas fa-image" />
+                    </div>
+                  )} */}
+                </>
+              ) : (
+                user.username
+              )}
+            </small>
           </div>
         </Link>
       </div>

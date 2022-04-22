@@ -87,7 +87,8 @@
     margin: 10px 0;
 }
 
-.status_body .show_images #file_img img {
+.status_body .show_images #file_img img,
+.status_body .show_images #file_img video {
     display: block;
     object-fit: contain;
     width: 100%;

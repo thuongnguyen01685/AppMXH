@@ -11,11 +11,27 @@ const PostThumb = ({ posts, result }) => {
       {posts.map((post) => (
         <Link key={post._id} to={`/post/${post._id}`}>
           <div className="post_thumb_display">
-            <img
+            {post.images[0].url.match(/video/i) ? (
+              <video
+                controls
+                src={post.images[0].url}
+                className="d-block w-100"
+                alt={post.images[0].url}
+                style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+              />
+            ) : (
+              <img
+                src={post.images[0].url}
+                className="d-block w-100"
+                alt={post.images[0].url}
+                style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+              />
+            )}
+            {/* <img
               src={post.images[0].url}
               alt={post.images[0].url}
               style={{ filter: theme ? "invert(1)" : "invert(0)" }}
-            />
+            /> */}
             <div className="post_thumb_menu">
               <div className="menu d-flex">
                 <i className="far fa-heart">{post.likes.length}</i>
