@@ -36,12 +36,12 @@ const UserCard = ({
                   <div style={{ filter: theme ? "invert(1)" : "invert(0)" }}>
                     {user.text}
                   </div>
-                  {/* {user.media.length > 0 && (
+                  {user.media.length > 0 && (
                     <div>
                       Đã nhận {user.media.length} ảnh{" "}
                       <i className="fas fa-image" />
                     </div>
-                  )} */}
+                  )}
                 </>
               ) : (
                 user.username

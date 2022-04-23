@@ -10,6 +10,7 @@ const userRouter = require("./routers/userRouter");
 const postRouter = require("./routers/postRouter");
 const commentRouter = require("./routers/commentRouter");
 const notifyRouter = require("./routers/notifyRouter");
+const messageRouter = require("./routers/messageRouter");
 
 const SocketServer = require("./socketServer");
 
@@ -33,6 +34,7 @@ app.use("/api", userRouter);
 app.use("/api", postRouter);
 app.use("/api", commentRouter);
 app.use("/api", notifyRouter);
+app.use("/api", messageRouter);
 
 const port = process.env.PORT || 5000;
 app.get("/", (req, res) => {

@@ -31,6 +31,19 @@ const messageReducer = (state = initialState, action) => {
             : user
         ),
       };
+    case MESS_TYPES.GET_CONVERSATIONS:
+      return {
+        ...state,
+        users: action.payload.newArr,
+        resultUsers: action.payload.result,
+        firstLoad: true,
+      };
+    case MESS_TYPES.GET_MESSAGES:
+      return {
+        ...state,
+        data: action.payload.messages.reverse(),
+        resultData: action.payload.result,
+      };
     default:
       return state;
   }
