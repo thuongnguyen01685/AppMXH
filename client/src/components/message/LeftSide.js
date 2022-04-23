@@ -7,12 +7,15 @@ import { useHistory, useParams } from "react-router-dom";
 
 import UserCard from "../UserCard";
 import { addUser, getConversations } from "../../redux/actions/messageAction";
+import { useRef } from "react";
 
 const LeftSide = () => {
   const { auth, message, theme } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
+  const pageEnd = useRef();
+  const [page, setPage] = useState(0);
 
   const [search, setSearch] = useState("");
   const [searchUsers, setSearchUsers] = useState([]);
@@ -47,6 +50,27 @@ const LeftSide = () => {
     if (message.firstLoad) return;
     dispatch(getConversations({ auth }));
   }, [dispatch, auth, message.firstLoad]);
+
+  //Xem them...
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((p) => p + 1);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+    observer.observe(pageEnd.current);
+  }, [setPage]);
+
+  useEffect(() => {
+    if (message.resultUsers >= (page - 1) * 9 && page > 1) {
+      dispatch(getConversations({ auth, page }));
+    }
+  }, [message.resultUsers, page, auth, dispatch]);
   return (
     <>
       <form className="message_header" onSubmit={handleSearch}>
@@ -87,6 +111,9 @@ const LeftSide = () => {
             ))}
           </>
         )}
+        <button ref={pageEnd} style={{ opacity: 0 }}>
+          Xem thêm...
+        </button>
       </div>
     </>
   );

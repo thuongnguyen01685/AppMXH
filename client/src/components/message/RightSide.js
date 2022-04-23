@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -10,7 +10,11 @@ import Icons from "../Icons";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
 import { imageShow, videoShow } from "../../utils/mediaShow";
 import { imageUpload } from "../../utils/imageUpload";
-import { addMessage, getMessages } from "../../redux/actions/messageAction";
+import {
+  addMessage,
+  getMessages,
+  MESS_TYPES,
+} from "../../redux/actions/messageAction";
 import LoadIcon from "../../images/loading.gif";
 
 const RightSide = () => {
@@ -21,6 +25,19 @@ const RightSide = () => {
   const [text, setText] = useState("");
   const [media, setMedia] = useState([]);
   const [loadMedia, setLoadMedia] = useState(false);
+
+  const refDisplay = useRef();
+  const pageEnd = useRef();
+  const [page, setPage] = useState(0);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const newData = message.data.filter(
+      (item) => item.sender === auth.user._id || item.sender === id
+    );
+    setData(newData);
+  }, [message.data, auth.user._id, id]);
 
   useEffect(() => {
     const newUser = message.users.find((user) => user._id === id);
@@ -71,17 +88,56 @@ const RightSide = () => {
     };
 
     setLoadMedia(false);
-    dispatch(addMessage({ msg, auth, socket }));
+    await dispatch(addMessage({ msg, auth, socket }));
+    if (refDisplay.current) {
+      refDisplay.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
   };
 
   useEffect(() => {
     if (id) {
       const getMessagesData = async () => {
+        // dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: { message: [] } });
+        setPage(1);
         await dispatch(getMessages({ auth, id }));
+
+        if (refDisplay.current) {
+          refDisplay.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+        }
       };
       getMessagesData();
     }
   }, [id, dispatch, auth]);
+
+  //Xem them...
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((p) => p + 1);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+    observer.observe(pageEnd.current);
+  }, [setPage]);
+
+  useEffect(() => {
+    if (message.resultData >= (page - 1) * 9 && page > 1) {
+      dispatch(getMessages({ auth, id, page }));
+    }
+  }, [message.resultData, page, id, auth, dispatch]);
+
+  useEffect(() => {
+    if (refDisplay.current) {
+      refDisplay.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [text]);
   return (
     <>
       <div className="message_header">
@@ -94,8 +150,11 @@ const RightSide = () => {
       <div
         className="chat_container"
         style={{ height: media.length > 0 ? "calc(100% - 180px)" : "" }}>
-        <div className="chat_display">
-          {message.data.map((msg, index) => (
+        <div className="chat_display" ref={refDisplay}>
+          <button style={{ marginTop: "-25px", opacity: 0 }} ref={pageEnd}>
+            Xem thêm...
+          </button>
+          {data.map((msg, index) => (
             <div key={index}>
               {msg.sender !== auth.user._id && (
                 <div className="chat_row other_message">
