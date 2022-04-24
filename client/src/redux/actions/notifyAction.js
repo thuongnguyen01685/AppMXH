@@ -55,7 +55,7 @@ export const deleteNotify =
 export const getNotifies = (token) => async (dispatch) => {
   try {
     const res = await getDataAPI("notifies", token);
-    console.log(res);
+
     dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: res.data.notifies });
   } catch (error) {
     dispatch({

@@ -1,11 +1,13 @@
-import { getDataAPI, postDataAPI } from "../../utils/fetchData";
-import { GLOBALTYPES } from "../actions/globalTypes";
+import { deleteDataAPI, getDataAPI, postDataAPI } from "../../utils/fetchData";
+import { DeleteData, GLOBALTYPES } from "../actions/globalTypes";
 
 export const MESS_TYPES = {
   ADD_USER: "ADD_USER",
   ADD_MESSAGE: "ADD_MESSAGE",
   GET_CONVERSATIONS: "GET_CONVERSATIONS",
   GET_MESSAGES: "GET_MESSAGES",
+  UPDATE_MESSAGES: "UPDATE_MESSAGES",
+  DELETE_MESSAGES: "DELETE_MESSAGES",
 };
 
 export const addUser =
@@ -26,6 +28,7 @@ export const addMessage =
   async (dispatch) => {
     dispatch({ type: MESS_TYPES.ADD_MESSAGE, payload: msg });
     socket.emit("addMessage", msg);
+
     try {
       await postDataAPI("message", msg, auth.token);
     } catch (error) {
@@ -73,7 +76,54 @@ export const getMessages =
         auth.token
       );
 
-      dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: res.data });
+      const newData = { ...res.data, messages: res.data.messages.reverse() };
+
+      dispatch({
+        type: MESS_TYPES.GET_MESSAGES,
+        payload: { ...newData, _id: id, page },
+      });
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.reponse.data.msg },
+      });
+    }
+  };
+
+export const loadMoreMessages =
+  ({ auth, id, page = 1 }) =>
+  async (dispatch) => {
+    try {
+      const res = await getDataAPI(
+        `message/${id}?limit=${page * 9}`,
+        auth.token
+      );
+
+      const newData = { ...res.data, messages: res.data.messages.reverse() };
+
+      dispatch({
+        type: MESS_TYPES.UPDATE_MESSAGES,
+        payload: { ...newData, _id: id, page },
+      });
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.reponse.data.msg },
+      });
+    }
+  };
+
+export const deleteMessages =
+  ({ msg, data, auth, socket }) =>
+  async (dispatch) => {
+    const newData = DeleteData(data, msg._id);
+    dispatch({
+      type: MESS_TYPES.DELETE_MESSAGES,
+      payload: { newData, _id: msg.recipient },
+    });
+
+    try {
+      await deleteDataAPI(`message/${msg._id}`, auth.token);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,

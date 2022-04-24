@@ -212,3 +212,21 @@
 .chat_title {
     margin-bottom: 3px;
 }
+
+.you_content {
+    position: relative;
+}
+
+.you_content .fa-trash {
+    position: absolute;
+    top: 50%;
+    left: -15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    opacity: 0;
+}
+
+.you_content:hover .fa-trash {
+    opacity: 1;
+}
