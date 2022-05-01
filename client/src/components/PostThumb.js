@@ -15,14 +15,14 @@ const PostThumb = ({ posts, result }) => {
               <video
                 controls
                 src={post.images[0].url}
-                className="d-block w-100"
+                className=""
                 alt={post.images[0].url}
                 style={{ filter: theme ? "invert(1)" : "invert(0)" }}
               />
             ) : (
               <img
                 src={post.images[0].url}
-                className="d-block w-100"
+                className=""
                 alt={post.images[0].url}
                 style={{ filter: theme ? "invert(1)" : "invert(0)" }}
               />

@@ -6,11 +6,14 @@ import { GLOBALTYPES } from "../../redux/actions/globalTypes";
 import { useHistory, useParams } from "react-router-dom";
 
 import UserCard from "../UserCard";
-import { addUser, getConversations } from "../../redux/actions/messageAction";
+import {
+  getConversations,
+  MESS_TYPES,
+} from "../../redux/actions/messageAction";
 import { useRef } from "react";
 
 const LeftSide = () => {
-  const { auth, message, theme } = useSelector((state) => state);
+  const { auth, message, theme, online } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
@@ -37,7 +40,11 @@ const LeftSide = () => {
   const handleAddUser = (user) => {
     setSearch("");
     setSearchUsers([]);
-    dispatch(addUser({ user, message }));
+    dispatch({
+      type: MESS_TYPES.ADD_USER,
+      payload: { ...user, text: "", media: [] },
+    });
+    dispatch({ type: MESS_TYPES.CHECK_ONLINE_OFFLINE, payload: online });
     return history.push(`/message/${user._id}`);
   };
 
@@ -71,6 +78,15 @@ const LeftSide = () => {
       dispatch(getConversations({ auth, page }));
     }
   }, [message.resultUsers, page, auth, dispatch]);
+
+  //Check User Online - offline
+
+  useEffect(() => {
+    if (message.firstLoad) {
+      dispatch({ type: MESS_TYPES.CHECK_ONLINE_OFFLINE, payload: online });
+    }
+  }, [online, message.firstLoad, dispatch]);
+
   return (
     <>
       <form className="message_header" onSubmit={handleSearch}>
@@ -105,7 +121,13 @@ const LeftSide = () => {
                 className={`message_user ${isActive(user)}`}
                 onClick={() => handleAddUser(user)}>
                 <UserCard user={user} msg={true} theme={theme}>
-                  <i className="fas fa-circle" />
+                  {user.online ? (
+                    <i className="fas fa-circle text-success" />
+                  ) : (
+                    auth.user.following.find(
+                      (item) => item._id === user._id
+                    ) && <i className="fas fa-circle" />
+                  )}
                 </UserCard>
               </div>
             ))}

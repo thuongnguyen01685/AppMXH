@@ -13,6 +13,7 @@ import suggestions from "./suggestionReducer";
 import socket from "./socketReducer";
 import notify from "./notifyReducer";
 import message from "./messengerReducer";
+import online from "./onlineReducer";
 
 export default combineReducers({
   auth,
@@ -29,4 +30,5 @@ export default combineReducers({
   socket,
   notify,
   message,
+  online,
 });

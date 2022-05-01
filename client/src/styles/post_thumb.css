@@ -19,7 +19,8 @@
     border-radius: 5px;
 }
 
-.post_thumb_display img {
+.post_thumb_display img,
+.post_thumb_display video {
     width: 100%;
     height: 100%;
     display: block;

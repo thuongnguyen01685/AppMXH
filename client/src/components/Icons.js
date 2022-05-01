@@ -39,7 +39,7 @@ const Icons = ({ setContent, content, theme }) => {
         aria-expanded="false">
         <span style={{ opacity: 0.4 }}>😄</span>
       </span>
-      <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+      <div className="dropdown-menu pd" aria-labelledby="navbarDropdown">
         <div className="reactions">
           {reactions.map((icon) => (
             <span key={icon} onClick={() => setContent(content + icon)}>
