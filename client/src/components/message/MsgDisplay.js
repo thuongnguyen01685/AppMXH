@@ -10,7 +10,8 @@ const MsgDisplay = ({ user, msg, theme, data }) => {
   const dispatch = useDispatch();
 
   const handleDeleteMessages = () => {
-    if (data) {
+    if (!data) return;
+    if (window.confirm("Bạn có muốn xóa cuộc tin nhắn này không?")) {
       dispatch(deleteMessages({ msg, data, auth, socket }));
     }
   };

@@ -84,3 +84,7 @@ img {
 /*---------------Icons------------------*/
 
 @import url("./icons.css");
+
+/*---------------Call modal--------------*/
+
+@import url("./call_modal.css");
