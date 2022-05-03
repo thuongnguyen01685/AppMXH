@@ -205,7 +205,7 @@ const RightSide = () => {
                 onClick={handleAudioCall}
               />
               <i
-                className="fas fa-video text-primary mx-4"
+                className="fas fa-video text-primary mx-3"
                 onClick={handleCallVideo}
               />
               <i
