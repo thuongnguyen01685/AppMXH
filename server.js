@@ -13,6 +13,7 @@ const notifyRouter = require("./routers/notifyRouter");
 const messageRouter = require("./routers/messageRouter");
 
 const SocketServer = require("./socketServer");
+const { PeerServer } = require("peer");
 
 const app = express();
 
@@ -27,6 +28,9 @@ const io = require("socket.io")(http);
 io.on("connection", (socket) => {
   SocketServer(socket);
 });
+
+//Create peer server
+PeerServer({ port: 3001, path: "/" });
 
 //router
 app.use("/api", authRouter);
