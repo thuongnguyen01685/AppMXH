@@ -17,6 +17,31 @@ const UserCard = ({
     if (setShowFollowers) setShowFollowers(false);
     if (setShowFollowing) setShowFollowing(false);
   };
+  const showMsg = (user) => {
+    return (
+      <>
+        <div style={{ filter: theme ? "invert(1)" : "invert(0)" }}>
+          {user.text}
+        </div>
+        {user.media.length > 0 && (
+          <div>
+            Đã nhận {user.media.length} ảnh <i className="fas fa-image" />
+          </div>
+        )}
+        {user.call && (
+          <span className="material-icons">
+            {user.call.times === 0
+              ? user.call.video
+                ? "videocam_off"
+                : "phone_disabled"
+              : user.call.video
+              ? "video_camera_front"
+              : "call"}
+          </span>
+        )}
+      </>
+    );
+  };
   return (
     <div
       className={`d-flex p-2 align-items-center justify-content-between w-100 ${border}`}>
@@ -31,21 +56,7 @@ const UserCard = ({
             <span className="d-block">{user.fullname}</span>
 
             <small style={{ opacity: 0.7 }}>
-              {msg ? (
-                <>
-                  <div style={{ filter: theme ? "invert(1)" : "invert(0)" }}>
-                    {user.text}
-                  </div>
-                  {user.media.length > 0 && (
-                    <div>
-                      Đã nhận {user.media.length} ảnh{" "}
-                      <i className="fas fa-image" />
-                    </div>
-                  )}
-                </>
-              ) : (
-                user.username
-              )}
+              {msg ? showMsg(user) : user.username}
             </small>
           </div>
         </Link>

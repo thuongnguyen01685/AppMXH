@@ -26,9 +26,10 @@ const SocketServer = (socket) => {
 
       if (clients.length > 0) {
         clients.forEach((client) => {
-          socket.to(`$(client.socketId)`).emit("CheckUserOffline", data.id);
+          socket.to(`${client.socketId}`).emit("CheckUserOffline", data.id);
         });
       }
+
       if (data.call) {
         const callUser = users.find((user) => user.id === data.call);
         if (callUser) {
@@ -37,6 +38,7 @@ const SocketServer = (socket) => {
         }
       }
     }
+
     users = users.filter((user) => user.socketId !== socket.id);
   });
 

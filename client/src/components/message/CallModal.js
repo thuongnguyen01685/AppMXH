@@ -1,11 +1,14 @@
 import React from "react";
+import { useCallback } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { GLOBALTYPES } from "../../redux/actions/globalTypes";
+import { addMessage } from "../../redux/actions/messageAction";
 import Avatar from "../Avatar";
+import RingRing from "../../audio/client_src_audio_ringring.mp3";
 
 const CallModal = () => {
   const { call, auth, peer, socket, theme } = useSelector((state) => state);
@@ -19,7 +22,7 @@ const CallModal = () => {
   const youVideo = useRef();
   const otherVideo = useRef();
   const [tracks, setTracks] = useState(null);
-  // const [newCall, setNewCall] = useState(null);
+  const [newCall, setNewCall] = useState(null);
 
   //Set time
   useEffect(() => {
@@ -39,9 +42,30 @@ const CallModal = () => {
   }, [total]);
 
   //End call
+  const addCallMessage = useCallback(
+    (call, times, disconnect) => {
+      if (call.recipient !== auth.user._id || disconnect) {
+        const msg = {
+          sender: call.sender,
+          recipient: call.recipient,
+          text: "",
+          media: [],
+          call: { video: call.video, times },
+          createdAt: new Date().toISOString(),
+        };
+        dispatch(addMessage({ msg, auth, socket }));
+      }
+    },
+    [auth, dispatch, socket]
+  );
+
   const handleEndCall = () => {
     tracks && tracks.forEach((track) => track.stop());
-    socket.emit("endCall", call);
+    let times = answer ? total : 0;
+
+    socket.emit("endCall", { ...call, times });
+
+    addCallMessage(call, times);
     dispatch({ type: GLOBALTYPES.CALL, payload: null });
   };
 
@@ -50,20 +74,22 @@ const CallModal = () => {
       setTotal(0);
     } else {
       const timer = setTimeout(() => {
-        socket.emit("endCall", call);
+        socket.emit("endCall", { ...call, times: 0 });
+        addCallMessage(call, 0);
         dispatch({ type: GLOBALTYPES.CALL, payload: null });
       }, 15000);
       return () => clearTimeout(timer);
     }
-  }, [dispatch, answer, socket, call]);
+  }, [dispatch, answer, socket, call, addCallMessage]);
 
   useEffect(() => {
     socket.on("endCallToClient", (data) => {
       tracks && tracks.forEach((track) => track.stop());
+      addCallMessage(data, data.times);
       dispatch({ type: GLOBALTYPES.CALL, payload: null });
     });
     return () => socket.off("endCallToClient");
-  }, [socket, dispatch, tracks]);
+  }, [socket, dispatch, tracks, addCallMessage]);
 
   // Stream Media
   const openStream = (video) => {
@@ -120,14 +146,35 @@ const CallModal = () => {
   useEffect(() => {
     socket.on("callerDisconnect", () => {
       tracks && tracks.forEach((track) => track.stop());
+
+      let times = answer ? total : 0;
+      addCallMessage(call, times, true);
+
       dispatch({ type: GLOBALTYPES.CALL, payload: null });
+
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { error: "Kết thúc cuộc gọi." },
+        payload: { error: `Kết thúc cuộc gọi với ${call.fullname}` },
       });
     });
     return () => socket.off("callerDisconnect");
-  }, [tracks, socket, dispatch]);
+  }, [socket, tracks, dispatch, call, addCallMessage, answer, total]);
+
+  //Play - Pause Audio
+
+  const playAudio = (newAudio) => {
+    newAudio.pause();
+    newAudio.currentTime = 0;
+  };
+
+  useEffect(() => {
+    let newAudio = new Audio(RingRing);
+    if (answer) {
+      playAudio(newAudio);
+    } else {
+      playAudio(newAudio);
+    }
+  }, [answer]);
 
   return (
     <div className="call_modal">
@@ -153,7 +200,7 @@ const CallModal = () => {
               {call.video ? (
                 <span>Gọi video...</span>
               ) : (
-                <span>Gọi audio...</span>
+                <span>Gọi thoại...</span>
               )}
             </div>
           )}
