@@ -1,12 +1,26 @@
 import React from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Posts from "../components/home/Posts";
 import RightSidebar from "../components/home/RightSidebar";
 import Status from "../components/home/Status";
 import LoadIcon from "../images/loading.gif";
 
+let scroll = 0;
+
 const Home = () => {
   const { homePost, theme } = useSelector((state) => state);
+  window.addEventListener("scroll", () => {
+    if (window.location.pathname === "/") {
+      scroll = window.pageXOffset;
+      return scroll;
+    }
+  });
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({ top: scroll, behavior: "smooth" });
+    }, 100);
+  }, []);
   return (
     <div className="home row mx-0">
       <div
