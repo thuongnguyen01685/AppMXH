@@ -42,9 +42,6 @@ app.use("/api", notifyRouter);
 app.use("/api", messageRouter);
 
 const port = process.env.PORT || 5000;
-app.get("/", (req, res) => {
-  res.json({ msg: "Hello" });
-});
 
 //connect to mongodb
 const URI = process.env.MONGODB_URL;
