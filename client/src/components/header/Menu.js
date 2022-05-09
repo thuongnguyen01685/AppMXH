@@ -44,9 +44,14 @@ const Menu = () => {
               style={{ color: notify.data.length > 0 ? "crimson" : "" }}>
               notifications
             </span>
+
             <span className="notify_length">{notify.data.length}</span>
           </span>
-          <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+
+          <div
+            className="dropdown-menu"
+            aria-labelledby="navbarDropdown"
+            style={{ transform: "translateX(75px)" }}>
             <NotifyModal />
           </div>
         </li>

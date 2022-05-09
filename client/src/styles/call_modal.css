@@ -41,12 +41,14 @@
     justify-content: space-around;
 }
 
-.call_menu span {
+.call_menu button {
     font-size: 2rem;
     background: #eee;
     padding: 15px;
     border-radius: 50%;
     cursor: pointer;
+    border: none;
+    outline: none;
 }
 
 .call_modal .show_video {
@@ -67,6 +69,7 @@
     position: absolute;
     top: 0;
     right: 0;
+    max-height: 250px;
     width: 300px;
     border-radius: 5px;
     border: 1px solid crimson;
@@ -84,11 +87,13 @@
     padding: 15px;
     border-radius: 50%;
     cursor: pointer;
+    border: none;
+    outline: none;
 }
 
 .call_modal .time_video {
     position: absolute;
-    bottom: 100px;
+    bottom: 170px;
     left: 50%;
     transform: translateX(-50%);
     color: white;

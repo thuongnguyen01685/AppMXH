@@ -230,3 +230,7 @@
 .you_content:hover .fa-trash {
     opacity: 1;
 }
+
+.chat_input .dropdown-menu {
+    transform: translate3d(-93px, -206px, 0px) !important;
+}

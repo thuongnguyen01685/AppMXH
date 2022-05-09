@@ -13,7 +13,8 @@ const notifyRouter = require("./routers/notifyRouter");
 const messageRouter = require("./routers/messageRouter");
 
 const SocketServer = require("./socketServer");
-const { PeerServer } = require("peer");
+const { ExpressPeerServer } = require("peer");
+const path = require("path");
 
 const app = express();
 
@@ -30,7 +31,7 @@ io.on("connection", (socket) => {
 });
 
 //Create peer server
-PeerServer({ port: 3001, path: "/" });
+ExpressPeerServer(http, { path: "/" });
 
 //router
 app.use("/api", authRouter);
@@ -60,6 +61,12 @@ mongoose.connect(
     console.log("Connected to mongodb");
   }
 );
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 
 http.listen(port, () => {
   console.log("Server is running on port", port);

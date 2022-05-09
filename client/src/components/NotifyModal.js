@@ -1,17 +1,17 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import NoNotice from "../images/notice.png";
-import Avatar from "../components/Avatar";
+import { Link } from "react-router-dom";
+import Avatar from "./Avatar";
 import moment from "moment";
 import {
-  deleteAllNotifies,
   isReadNotify,
   NOTIFY_TYPES,
+  deleteAllNotifies,
 } from "../redux/actions/notifyAction";
 
 const NotifyModal = () => {
-  const { auth, theme, notify } = useSelector((state) => state);
+  const { auth, notify } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const handleIsRead = (msg) => {
@@ -26,9 +26,7 @@ const NotifyModal = () => {
     const newArr = notify.data.filter((item) => item.isRead === false);
     if (newArr.length === 0) return dispatch(deleteAllNotifies(auth.token));
 
-    if (
-      window.confirm(`Bạn chắc chắn muốn xóa ${newArr.length} thông báo này.`)
-    ) {
+    if (window.confirm(`Bạn có chắc chắn muốn xóa tất cả thông báo không?`)) {
       return dispatch(deleteAllNotifies(auth.token));
     }
   };
@@ -36,7 +34,7 @@ const NotifyModal = () => {
   return (
     <div style={{ minWidth: "320px" }}>
       <div className="d-flex justify-content-between align-items-center px-3">
-        <h5 style={{ top: "10px" }}>Thông báo</h5>
+        <h4>Thông báo</h4>
         {notify.sound ? (
           <i
             className="fas fa-bell text-danger"
@@ -51,15 +49,13 @@ const NotifyModal = () => {
           />
         )}
       </div>
-      <hr className="my-2" />
+      <hr className="mt-0" />
+
       {notify.data.length === 0 && (
         <img src={NoNotice} alt="NoNotice" className="w-100" />
       )}
-      <div
-        style={{
-          maxHeight: "cacl(100vh - 200px)",
-          overflow: "auto",
-        }}>
+
+      <div style={{ maxHeight: "calc(100vh - 200px)", overflow: "auto" }}>
         {notify.data.map((msg, index) => (
           <div key={index} className="px-2 mb-3">
             <Link
@@ -67,39 +63,39 @@ const NotifyModal = () => {
               className="d-flex text-dark align-items-center"
               onClick={() => handleIsRead(msg)}>
               <Avatar src={msg.user.avatar} size="big-avatar" />
+
               <div className="mx-1 flex-fill">
                 <div>
-                  <strong className="mr-1">{msg.user.fullname}</strong>
+                  <strong className="mr-1">{msg.user.username}</strong>
                   <span>{msg.text}</span>
                 </div>
                 {msg.content && <small>{msg.content.slice(0, 20)}...</small>}
               </div>
-              <div style={{ width: "30px" }}>
-                {msg.image && (
-                  <img
-                    src={msg.image}
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      borderRadius: "20%",
-                    }}
-                  />
-                )}
-              </div>
+
+              {msg.image && (
+                <div style={{ width: "30px" }}>
+                  {msg.image.match(/video/i) ? (
+                    <video src={msg.image} width="100%" />
+                  ) : (
+                    <Avatar src={msg.image} size="medium-avatar" />
+                  )}
+                </div>
+              )}
             </Link>
             <small className="text-muted d-flex justify-content-between px-2">
               {moment(msg.createdAt).fromNow()}
-              {!msg.isRead && <i className="fas fa-circle text text-primary" />}
+              {!msg.isRead && <i className="fas fa-circle text-primary" />}
             </small>
           </div>
         ))}
       </div>
+
       <hr className="my-1" />
       <div
         className="text-right text-danger mr-2"
         style={{ cursor: "pointer" }}
         onClick={handleDeleteAll}>
-        Xoá tất cả thông báo
+        Xóa tất cả thông báo
       </div>
     </div>
   );
